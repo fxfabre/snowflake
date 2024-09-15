@@ -51,3 +51,26 @@ ALTER PIPE S3_db.public.S3_pipe SET PIPE_EXECUTION_PAUSED = TRUE;
 DROP PIPE S3_pipe;
 
 SHOW PIPES;
+
+/*  AWS policy
+ {
+	"Version": "2012-10-17",
+	"Statement": [
+		{
+			"Effect": "Allow",
+			"Action": ["s3:GetObject", "s3:GetObjectVersion"],
+			"Resource": "arn:aws:s3:::test-snowflake-123/*"
+		},
+		{
+			"Effect": "Allow",
+			"Action": ["s3:ListBucket", "s3:GetBucketLocation"],
+			"Resource": "arn:aws:s3:::test-snowflake-123",
+			"Condition": {
+			    "StringLike": {
+			        "s3:prefix": ["*"]
+			    }
+			}
+		}
+	]
+}
+ */
