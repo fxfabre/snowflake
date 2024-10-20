@@ -3,8 +3,8 @@ CREATE OR REPLACE STORAGE INTEGRATION S3_role_integration
   TYPE = EXTERNAL_STAGE
   STORAGE_PROVIDER = S3
   ENABLED = TRUE
-  STORAGE_AWS_ROLE_ARN = "REMOVED"
-  STORAGE_ALLOWED_LOCATIONS = ("s3://intro-to-snowflake-snowpipe/");
+  STORAGE_AWS_ROLE_ARN = "arn:aws:iam::626635438523:role/snowflake_role_snowpipe"
+  STORAGE_ALLOWED_LOCATIONS = ("s3://test-snowflake-123/");
 
 ---> describe the storage integration to see the info you need to copy over to AWS
 DESCRIBE INTEGRATION S3_role_integration;
@@ -19,7 +19,7 @@ USE SCHEMA S3_db.public;
 
 ---> create stage with the link to the S3 bucket and info on the associated storage integration
 CREATE OR REPLACE STAGE S3_stage
-  url = ('s3://intro-to-snowflake-snowpipe/')
+  url = ('s3://test-snowflake-123/')
   storage_integration = S3_role_integration;
 
 SHOW STAGES;
@@ -52,25 +52,5 @@ DROP PIPE S3_pipe;
 
 SHOW PIPES;
 
-/*  AWS policy
- {
-	"Version": "2012-10-17",
-	"Statement": [
-		{
-			"Effect": "Allow",
-			"Action": ["s3:GetObject", "s3:GetObjectVersion"],
-			"Resource": "arn:aws:s3:::test-snowflake-123/*"
-		},
-		{
-			"Effect": "Allow",
-			"Action": ["s3:ListBucket", "s3:GetBucketLocation"],
-			"Resource": "arn:aws:s3:::test-snowflake-123",
-			"Condition": {
-			    "StringLike": {
-			        "s3:prefix": ["*"]
-			    }
-			}
-		}
-	]
-}
- */
+
+
