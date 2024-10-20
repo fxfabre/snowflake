@@ -80,6 +80,7 @@ create or replace file format util_db.public.PIPE_DBLQUOTE_HEADER_CR
     skip_header = 1  --1 header row
     field_optionally_enclosed_by = '\042'  --double quotes
     trim_space = FALSE;
+
 show stages in account;
 create stage util_db.public.aws_s3_bucket url = 's3://uni-cmcw';
 list @util_db.public.aws_s3_bucket;
