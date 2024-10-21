@@ -109,18 +109,3 @@ select GRADER(step, (actual = expected), actual, expected, description) as grade
      , 8 as expected
      ,'Soil Type Look Up Table' as description
 );
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
