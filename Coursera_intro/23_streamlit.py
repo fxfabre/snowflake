@@ -17,6 +17,8 @@ forward on their mission, Tasty Bytes is beginning to leverage the Snowflake Dat
 )
 st.divider()
 
+st.write("Our beautiful chart")
+
 
 @st.cache_data
 def get_city_sales_data(city_names: list, start_year: int = 2020, end_year: int = 2023):
@@ -26,13 +28,14 @@ def get_city_sales_data(city_names: list, start_year: int = 2020, end_year: int 
             primary_city,
             SUM(order_total) AS sum_orders
         FROM tasty_bytes.analytics.orders_v
-        WHERE primary_city in ({city_names})
+        WHERE primary_city not in ({city_names})
             and year(date) between {start_year} and {end_year}
         GROUP BY date, primary_city
         ORDER BY date DESC
     """
     sales_data = session.sql(sql).to_pandas()
     return sales_data, sql
+
 
 @st.cache_data
 def get_unique_cities():
@@ -43,6 +46,7 @@ def get_unique_cities():
     """
     city_data = session.sql(sql).to_pandas()
     return city_data
+
 
 def get_city_sales_chart(sales_data: pd.DataFrame):
     sales_data["SUM_ORDERS"] = pd.to_numeric(sales_data["SUM_ORDERS"])
@@ -66,13 +70,13 @@ def format_sql(sql):
     return sql.replace("\n        ", "\n")
 
 
-first_col, second_col = st.columns(2, gap="large")
+first_col, second_col, third_col = st.columns(3, gap="large")
 
 with first_col:
     start_year, end_year = st.select_slider(
         "Select date range you want to filter the chart on below:",
         options=range(2020, 2024),
-        value=(2020, 2023),
+        value=(2022, 2023),
     )
 with second_col:
     selected_city = st.multiselect(
@@ -80,6 +84,7 @@ with second_col:
         options=get_unique_cities()["PRIMARY_CITY"].tolist(),
         default="San Mateo",
     )
+
 if len(selected_city) == 0:
     city_selection = ""
 else:
